@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+      <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Khand:700'>
+
+      <style>
+         body {
+            overflow: hidden;
+
+            background-color: #000000;
+
+            font-family: 'Khand', sans-serif;
+            font-size: 180px;
+            font-weight: 700;
+            text-align: center;
+            color: white;
+         }
+
+         section {
+            display: block;
+            position: relative;
+         }
+
+         .container {
+            position: relative;
+         }
+
+         #S001 {
+            background-color: #ed8c2b;
+         }
+
+         #S002 {
+            background-color: #cf4a30;
+         }
+
+         #S003 {
+            background-color: #911146;
+         }
+
+         #S004 {
+            background-color: #35203b;
+         }
+
+         #S005 {
+            background-color: #88a825;
+         }
+      </style>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.2/velocity.js"></script>
+   </head>
+
+   <body>
+      <div id="page-wrapper">
+         <section id="S001">
+            <div class="container">
+               S001
+            </div>
+         </section>
+
+         <section id="S002">
+            <div class="container">
+               S002
+            </div>
+         </section>
+
+         <section id="S003">
+            <div class="container">
+               S003
+            </div>
+         </section>
+
+         <section id="S004">
+            <div class="container">
+               S004
+            </div>
+         </section>
+
+         <section id="S005">
+            <div class="container">
+               S005
+            </div>
+         </section>
+      </div>
+
+      <script>
+         var CURRENT_SECTION = 0;
+         var SECTION_COUNT = 5;
+
+         var ACCUMULATED_SCROLL = 0;
+
+         $(document).keydown(function(e) {
+            if (e.which == 40) { // Down arrow
+               if (CURRENT_SECTION == SECTION_COUNT - 1) return;
+
+               CURRENT_SECTION += 1;
+
+               navigateToCurrentSection();
+            }
+
+            if (e.which == 38) { // Up arrow
+               if (CURRENT_SECTION == 0) return;
+
+               CURRENT_SECTION -= 1;
+               navigateToCurrentSection();
+            }
+         });
+
+         $(window).resize(function(){
+            adjustContainerHeight();
+         });
+
+         $(window).mousewheel(function(event) {
+            var height = $(window).height();
+
+            ACCUMULATED_SCROLL += -(event.deltaY * event.deltaFactor);
+
+            if ((ACCUMULATED_SCROLL < 0 && CURRENT_SECTION == 0) || (ACCUMULATED_SCROLL > 0 && CURRENT_SECTION == SECTION_COUNT - 1)) {
+               ACCUMULATED_SCROLL = 0;
+               return;
+            }
+
+            if (ACCUMULATED_SCROLL >= height) {
+               ACCUMULATED_SCROLL = 0;
+               CURRENT_SECTION += 1;
+               navigateToCurrentSection();
+            } else if (ACCUMULATED_SCROLL <= -height) {
+               ACCUMULATED_SCROLL = 0;
+               CURRENT_SECTION -= 1;
+               navigateToCurrentSection();
+            } else {
+               $('#page-wrapper').velocity("stop").velocity({
+                  translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL / 10)
+               }, 100);
+            }
+         });
+
+         var navigateToCurrentSection = function() {
+            var offset = -CURRENT_SECTION * $(window).height();
+            $('#page-wrapper').velocity("stop").velocity({
+               translateY: offset
+            }, 300);
+         }
+
+         var adjustContainerHeight = function() {
+            var height = $(window).height();
+
+            $('.container')
+               .height(height)
+               .css({
+                  lineHeight: height + 'px'
+               });
+
+            navigateToCurrentSection();
+         }
+
+         adjustContainerHeight();
+      </script>
+   </body>
+</html>
