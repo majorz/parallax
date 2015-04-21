@@ -93,6 +93,7 @@
          var SECTION_COUNT = 5;
 
          var ACCUMULATED_SCROLL = 0;
+         var TIMER_ID = null;
 
          $(document).keydown(function(e) {
             if (e.which == 40) { // Down arrow
@@ -125,18 +126,28 @@
                return;
             }
 
-            if (ACCUMULATED_SCROLL >= height) {
+            if (ACCUMULATED_SCROLL >= height * 2 / 3) {
                ACCUMULATED_SCROLL = 0;
                CURRENT_SECTION += 1;
                navigateToCurrentSection();
-            } else if (ACCUMULATED_SCROLL <= -height) {
+            } else if (ACCUMULATED_SCROLL <= -height * 2 / 3) {
                ACCUMULATED_SCROLL = 0;
                CURRENT_SECTION -= 1;
                navigateToCurrentSection();
             } else {
                $('#page-wrapper').velocity("stop").velocity({
-                  translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL / 10)
+                  translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL / 13)
                }, 100);
+
+               if (TIMER_ID != null) {
+                  clearTimeout(TIMER_ID);
+                  TIMER_ID = null;
+               };
+
+               TIMER_ID = setTimeout(function() {
+                  TIMER_ID = null;
+                  navigateToCurrentSection();
+               }, 800);
             }
          });
 
