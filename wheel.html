@@ -116,6 +116,8 @@
             adjustContainerHeight();
          });
 
+         var easingFunction = jQuery.fn.velocity.Easings.easeInQuad;
+
          $(window).mousewheel(function(event) {
             var height = $(window).height();
 
@@ -126,18 +128,25 @@
                return;
             }
 
-            if (ACCUMULATED_SCROLL >= height * 2 / 3) {
+            var switchDistance = height * 2 / 3;
+
+            if (ACCUMULATED_SCROLL >= switchDistance) {
                ACCUMULATED_SCROLL = 0;
                CURRENT_SECTION += 1;
                navigateToCurrentSection();
-            } else if (ACCUMULATED_SCROLL <= -height * 2 / 3) {
+            } else if (ACCUMULATED_SCROLL <= -switchDistance) {
                ACCUMULATED_SCROLL = 0;
                CURRENT_SECTION -= 1;
                navigateToCurrentSection();
             } else {
+               var normalized = Math.abs(ACCUMULATED_SCROLL / switchDistance);
+               var easing = easingFunction(normalized);
                $('#page-wrapper').velocity("stop").velocity({
-                  translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL / 13)
-               }, 100);
+                  translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL * easing / 3)
+               }, {
+                  easing: "linear",
+                  duration: 100
+               });
 
                if (TIMER_ID != null) {
                   clearTimeout(TIMER_ID);
@@ -146,16 +155,19 @@
 
                TIMER_ID = setTimeout(function() {
                   TIMER_ID = null;
-                  navigateToCurrentSection();
-               }, 800);
+                  navigateToCurrentSection(200);
+               }, 600);
             }
          });
 
-         var navigateToCurrentSection = function() {
+         var navigateToCurrentSection = function(duration) {
+            if (duration === undefined) {
+               duration = 300;
+            }
             var offset = -CURRENT_SECTION * $(window).height();
             $('#page-wrapper').velocity("stop").velocity({
                translateY: offset
-            }, 300);
+            }, duration);
          }
 
          var adjustContainerHeight = function() {
