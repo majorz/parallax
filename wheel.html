@@ -95,6 +95,8 @@
          var ACCUMULATED_SCROLL = 0;
          var TIMER_ID = null;
 
+         var easingFunction = jQuery.fn.velocity.Easings.easeInQuad;
+
          $(document).keydown(function(e) {
             if (e.which == 40) { // Down arrow
                if (CURRENT_SECTION == SECTION_COUNT - 1) return;
@@ -115,8 +117,6 @@
          $(window).resize(function(){
             adjustContainerHeight();
          });
-
-         var easingFunction = jQuery.fn.velocity.Easings.easeInQuad;
 
          $(window).mousewheel(function(event) {
             var height = $(window).height();
