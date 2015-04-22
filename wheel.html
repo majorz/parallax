@@ -95,6 +95,8 @@
          var ACCUMULATED_SCROLL = 0;
          var TIMER_ID = null;
 
+         var HEIGHT_RATIO = 4 / 7;
+
          var easingFunction = jQuery.fn.velocity.Easings.easeInQuad;
 
          $(document).keydown(function(e) {
@@ -119,15 +121,14 @@
          });
 
          $(window).mousewheel(function(event) {
-            var height = $(window).height();
-            var switchDistance = height * 2 / 3;
-
             ACCUMULATED_SCROLL += -(event.deltaY * event.deltaFactor);
 
             if ((ACCUMULATED_SCROLL < 0 && CURRENT_SECTION == 0) || (ACCUMULATED_SCROLL > 0 && CURRENT_SECTION == SECTION_COUNT-1)) {
                ACCUMULATED_SCROLL = 0;
                return;
             }
+
+            var switchDistance = $(window).height() * HEIGHT_RATIO;
 
             if (ACCUMULATED_SCROLL >= switchDistance) {
                ACCUMULATED_SCROLL = 0;
@@ -138,14 +139,7 @@
                CURRENT_SECTION -= 1;
                navigateToCurrentSection();
             } else {
-               var normalized = Math.abs(ACCUMULATED_SCROLL / switchDistance);
-               var easing = easingFunction(normalized);
-               $('#page-wrapper').velocity("stop").velocity({
-                  translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL * easing / 3)
-               }, {
-                  easing: "linear",
-                  duration: 100
-               });
+               shiftToAccumulatedScroll();
 
                if (TIMER_ID != null) {
                   clearTimeout(TIMER_ID);
@@ -158,6 +152,22 @@
                }, 600);
             }
          });
+
+         var shiftToAccumulatedScroll = function() {
+            var height = $(window).height();
+
+            var switchDistance = height * HEIGHT_RATIO;
+
+            var normalized = Math.abs(ACCUMULATED_SCROLL / switchDistance);
+            var easing_ratio = easingFunction(normalized);
+
+            $('#page-wrapper').velocity("stop").velocity({
+               translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL * easing_ratio / 3)
+            }, {
+               easing: "linear",
+               duration: 100
+            });
+         }
 
          var navigateToCurrentSection = function(duration) {
             if (duration === undefined) {
