@@ -120,15 +120,14 @@
 
          $(window).mousewheel(function(event) {
             var height = $(window).height();
+            var switchDistance = height * 2 / 3;
 
             ACCUMULATED_SCROLL += -(event.deltaY * event.deltaFactor);
 
-            if ((ACCUMULATED_SCROLL < 0 && CURRENT_SECTION == 0) || (ACCUMULATED_SCROLL > 0 && CURRENT_SECTION == SECTION_COUNT - 1)) {
+            if ((ACCUMULATED_SCROLL < 0 && CURRENT_SECTION == 0) || (ACCUMULATED_SCROLL > 0 && CURRENT_SECTION == SECTION_COUNT-1)) {
                ACCUMULATED_SCROLL = 0;
                return;
             }
-
-            var switchDistance = height * 2 / 3;
 
             if (ACCUMULATED_SCROLL >= switchDistance) {
                ACCUMULATED_SCROLL = 0;
