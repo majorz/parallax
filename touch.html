@@ -98,6 +98,7 @@
          var HEIGHT_RATIO = 4 / 7;
 
          var TOUCHSTART_Y = null;
+         var TOUCHSTART_SECTION = null;
 
          var easingFunction = jQuery.fn.velocity.Easings.easeInQuad;
 
@@ -133,6 +134,7 @@
 
             var e = event.originalEvent;
             TOUCHSTART_Y = e.touches[0].pageY;
+            TOUCHSTART_SECTION = CURRENT_SECTION;
 
             console.log(e);
          });
@@ -143,11 +145,14 @@
             var e = event.originalEvent;
             var y = e.touches[0].pageY;
 
-            console.log(e.touches[0].pageY, e.touches[0].clientY);
-
             ACCUMULATED_SCROLL = TOUCHSTART_Y - y;
 
             processAccumulatedMove();
+
+            if (CURRENT_SECTION != TOUCHSTART_SECTION) {
+               TOUCHSTART_Y = y;
+               TOUCHSTART_SECTION = CURRENT_SECTION;
+            }
          });
 
          var processAccumulatedMove = function() {
