@@ -16,6 +16,10 @@ macro_rules! html_template {() => ("<!doctype html>
 
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css'>
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Khand:700'>
+
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.2/velocity.js'></script>
    </head>
 
    <style>
