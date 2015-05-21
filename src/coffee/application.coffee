@@ -8,6 +8,7 @@ TOUCHSTART_SECTION = null
 
 easingFunction = jQuery.fn.velocity.Easings.easeInQuad
 
+
 $(document).keydown (e) ->
    if e.which == 40
       # Down arrow
@@ -21,16 +22,16 @@ $(document).keydown (e) ->
          return
       CURRENT_SECTION -= 1
       navigateToCurrentSection()
-   return
+
 
 $(window).resize ->
    adjustContainerHeight()
-   return
+
 
 $(window).mousewheel (event) ->
    ACCUMULATED_SCROLL += -(event.deltaY * event.deltaFactor)
    processAccumulatedMove()
-   return
+
 
 $(window).on 'touchstart', (event) ->
    event.preventDefault()
@@ -38,7 +39,7 @@ $(window).on 'touchstart', (event) ->
    TOUCHSTART_Y = e.touches[0].pageY
    TOUCHSTART_SECTION = CURRENT_SECTION
    console.log e
-   return
+
 
 $(window).on 'touchmove', (event) ->
    event.preventDefault()
@@ -49,7 +50,7 @@ $(window).on 'touchmove', (event) ->
    if CURRENT_SECTION != TOUCHSTART_SECTION
       TOUCHSTART_Y = y
       TOUCHSTART_SECTION = CURRENT_SECTION
-   return
+
 
 processAccumulatedMove = ->
    if ACCUMULATED_SCROLL < 0 and CURRENT_SECTION == 0 or ACCUMULATED_SCROLL > 0 and CURRENT_SECTION == SECTION_COUNT - 1
@@ -74,7 +75,7 @@ processAccumulatedMove = ->
          navigateToCurrentSection 200
          return
       ), 600)
-   return
+
 
 transitionToAccumulated = ->
    height = $(window).height()
@@ -84,19 +85,19 @@ transitionToAccumulated = ->
    $('#page-wrapper').velocity('stop').velocity { translateY: -(CURRENT_SECTION * height + ACCUMULATED_SCROLL * easing_ratio / 3) },
       easing: 'linear'
      duration: 100
-   return
+
 
 navigateToCurrentSection = (duration) ->
    if duration == undefined
       duration = 300
    offset = -CURRENT_SECTION * $(window).height()
    $('#page-wrapper').velocity('stop').velocity { translateY: offset }, duration
-   return
+
 
 adjustContainerHeight = ->
    height = $(window).height()
    $('.container').height(height).css lineHeight: height + 'px'
    navigateToCurrentSection()
-   return
+
 
 adjustContainerHeight()
