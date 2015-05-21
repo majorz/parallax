@@ -1,11 +1,14 @@
 [package]
 
-name = "parallax"
-version = "0.0.4"
+name = "mod_parallax"
+version = "0.0.5"
 
 [lib]
-name = "parallax"
+name = "mod_parallax"
 crate-type = ["dylib"]
+
+[dependencies]
+interpolate_idents = "*"
 
 [dependencies.apache2]
 git = "https://github.com/majorz/apache2-rs.git"

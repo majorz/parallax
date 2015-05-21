@@ -1,9 +1,12 @@
+#![feature(plugin)]
+#![plugin(interpolate_idents)]
+
 #[macro_use]
 extern crate apache2;
 
 use apache2::{Request, Status};
 
-apache2_module!(parallax_handler, c_parallax_handler, parallax_module, b"parallax\0");
+apache2_module!(parallax, b"mod_parallax\0");
 
 
 macro_rules! html_template {() => ("<!doctype html>
