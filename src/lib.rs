@@ -19,7 +19,7 @@ apache2_module!(parallax, b"mod_parallax\0", handlers {
 
 
 fn parallax_handler(r: &mut Request) -> Result<Status, ()> {
-   if try!(r.handler()) != "parallax" {
+   if get!(r.handler()) != "parallax" {
       return Ok(Status::DECLINED)
    }
 
@@ -36,7 +36,7 @@ fn parallax_handler(r: &mut Request) -> Result<Status, ()> {
 
 
 fn js_handler(r: &mut Request) -> Result<Status, ()> {
-   if try!(r.handler()) != "js" {
+   if get!(r.handler()) != "js" {
       return Ok(Status::DECLINED)
    }
 
