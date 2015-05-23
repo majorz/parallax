@@ -11,4 +11,4 @@ crate-type = ["dylib"]
 interpolate_idents = "*"
 
 [dependencies.apache2]
-git = "https://github.com/majorz/apache2-rs.git"
+path = "../apache2-rs"
